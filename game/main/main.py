@@ -1,6 +1,8 @@
 import pygame
 import pygame.locals
 from level import *
+from tileCache import *
+from sprite import *
 
 
 def load_tile_table(filename, width, height):
@@ -28,6 +30,12 @@ if __name__ == "__main__":
     level = Level()
     level.load_file('Resources/level.map')
 
+    SPRITE_CACHE = TileCache(32, 32)
+    sprites = pygame.sprite.RenderUpdates()
+    for pos, tile in level.items.iteritems():
+        sprite = Sprite(pos, SPRITE_CACHE[tile["sprite"]])
+        sprites.add(sprite)
+
     clock = pygame.time.Clock()
 
     background, overlay_dict = level.render(MAP_CACHE, MAP_TILE_HEIGHT, MAP_TILE_WIDTH)
@@ -45,8 +53,11 @@ while not game_over:
 
     # XXX draw all the objects here
 
+    sprites.clear(screen, background)
+    sprites.update()
+    dirty = sprites.draw(screen)
     overlays.draw(screen)
-    pygame.display.flip()
+    pygame.display.update(dirty)
     clock.tick(15)
     for event in pygame.event.get():
         if event.type == pygame.locals.QUIT:

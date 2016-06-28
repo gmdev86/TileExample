@@ -1,3 +1,5 @@
+import pygame
+
 class TileCache:
     """Load the tilesets lazily into global cache"""
 
@@ -21,7 +23,7 @@ class TileCache:
     def _load_tile_table(self, filename, width, height):
         """Load an image and split it into tiles."""
 
-        image = pygame.image.load(filename).convert()
+        image = pygame.image.load("Resources/" + filename).convert()
         image_width, image_height = image.get_size()
         tile_table = []
         for tile_x in range(0, image_width/width):

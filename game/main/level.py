@@ -19,6 +19,12 @@ class Level(object):
         self.width = len(self.map[0])
         self.height = len(self.map)
 
+        self.items = {}
+        for y, line in enumerate(self.map):
+            for x, c in enumerate(line):
+                if not self.is_wall(x, y) and 'sprite' in self.key[c]:
+                    self.items[(x, y)] = self.key[c]
+
     def get_tile(self, x, y):
         """Tell what's at the specified position of the map."""
 
@@ -54,6 +60,7 @@ class Level(object):
         tiles = MAP_CACHE[self.tileset]
         image = pygame.Surface((self.width * MAP_TILE_WIDTH, self.height * MAP_TILE_HEIGHT))
         overlays = {}
+
         for map_y, line in enumerate(self.map):
             for map_x, c in enumerate(line):
                 if wall(map_x, map_y):
